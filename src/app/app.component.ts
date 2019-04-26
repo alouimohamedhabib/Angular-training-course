@@ -1,33 +1,50 @@
-import { Component, OnInit } from "@angular/core";
-import { db } from "./services/db";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { ChartDataSets, ChartOptions } from "chart.js";
+import { Color, BaseChartDirective, Label } from "ng2-charts";
+import { HttpClient } from "@angular/common/http";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"]
 })
 export class AppComponent implements OnInit {
-  title = "googlegraveyard";
-  graveyardData: any;
-  dataBackup: any;
+  title = "ChartJs";
+  url = "http://www.somaku.com/todos";
+  public lineChartData: ChartDataSets[] = [];
+  public lineChartLabels: Label[] = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July"
+  ];
 
-  ngOnInit() {
-    this.dataBackup = this.graveyardData = db;
-  }
+  public lineChartType = "line";
+  public lineChartPlugins = [];
 
-  /**
-   * Search for product
-   * @param data
-   */
-  searchProduct(data) {
-    const keyword:string = data.target.value;
-    if (keyword.trim().length == 0) {
-      this.graveyardData = this.dataBackup;
-      return;
-    }
-    // filter the data object
-    this.graveyardData = this.dataBackup.filter(function(item) {
-      let lowerKeyword = keyword.toLowerCase();
-      return item.name.toLowerCase().indexOf(lowerKeyword) > -1;
-    });
+  @ViewChild(BaseChartDirective) chart: BaseChartDirective;
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() { 
+      this.http.get(this.url).subscribe((todos: any) => {
+        let dataFiltred: any = todos.filter((item, key) => {
+          // console.log(item)
+          if (key > 6 && key < 12) return true;
+        });
+        dataFiltred = dataFiltred.map((item: any) =>
+          item.completed === false ? "-10" : "10"
+        );
+        // Return values 10 or -10
+        this.lineChartData = [
+          {
+            data: [...dataFiltred],
+            label: "this is an updated label"
+          }
+        ];
+      })
+    
   }
 }

@@ -2,57 +2,22 @@
   <div class="row">
     <div class="col-12">
       <div class="p-4 shadow-sm">
-        <h1 class=" text-center">Google graveyard ⛼</h1>
+        <h1 class=" text-center">ChartJs</h1>
       </div>
     </div>
   </div>
 </div>
 <div class="container">
-  <div class="row">
-    <div class="col-12">
-      <h2 class="mb-3 mt-3 d-block ">products killed by Google!</h2>
-    </div>
-    <div class="col-12">
-      <hr />
-    </div>
-
-    <div class="col-12">
-      <input type="search" (keyup)="searchProduct($event)" />
-    </div>
-    <!-- loop for product goes here -->
-
-    <div class="alert alert-error"  *ngIf="graveyardData.length == 0" >
-      Your search returned nothing, please ....
-    </div>
-
-    <div class="col-md-3 col-12 mb-4" *ngFor="let item of graveyardData">
-      <div class="card m-2">
-        <div
-          class="position-absolute p-1 item-type"
-          [ngClass]="{
-            green: item.type === 'hardware',
-            purple: item.type === 'app',
-            darkblue: item.type === 'service'
-          }"
-        >
-          {{ item.type }}
-        </div>
-        <!-- <img src="..." class="card-img-top" alt="..." /> -->
-        <div class="card-body">
-          <h5 class="card-title">{{ item.name }}</h5>
-          <h6>
-            <small> From {{ item.dateOpen }} to {{ item.dateClose }} </small>
-          </h6>
-          <p class="card-text">
-            {{ item.description }}
-          </p>
-          <a href="{{ item.link }}" class="btn btn-primary" target="_blank"
-            >Details</a
-          >
-        </div>
-      </div>
-    </div>
-
-    <!-- loop for product end here -->
+ <div class="row">
+  <div class="col-12" >
+    <canvas
+    *ngIf="lineChartData.length"
+    baseChart
+    [datasets]="lineChartData"
+    [labels]="lineChartLabels"
+    [chartType]="lineChartType"
+    [plugins]="lineChartPlugins"
+  ></canvas>
   </div>
+ </div>
 </div>
