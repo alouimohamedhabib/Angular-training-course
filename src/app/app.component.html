@@ -8,9 +8,22 @@
   </div>
 </div>
 <div class="container">
- <div class="row">
-  <div class="col-12" >
-    <canvas id="myChart" #myChart></canvas>
+  <div class="row">
+    <div class="col-6">
+      <input class="form-control" type="search" #cityName />
+    </div>
+    <div class="col-6">
+      <button (click)="searchWeather()">Get forcast</button>
+    </div>
   </div>
- </div>
+  <div class="row">
+    <div class="col-12">
+      <h1 *ngIf="cityNameFromInput">{{ cityNameFromInput }}</h1>
+
+      <ul *ngIf="cityData">
+        <li *ngFor="let weather of cityData.weather">{{ weather.description }}</li>
+      </ul>
+      <!-- <canvas id="myChart" #myChart></canvas> -->
+    </div>
+  </div>
 </div>

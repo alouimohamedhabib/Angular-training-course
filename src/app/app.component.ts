@@ -8,7 +8,7 @@ import {
 import { HttpClient } from "@angular/common/http";
 import { ChartType, Chart } from "chart.js";
 import { SingleDataSet, Label, Color } from "ng2-charts";
-
+import { config } from "./config/config";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
@@ -33,13 +33,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   ];
   @ViewChild("myChart") myChart: ElementRef;
+  @ViewChild("cityName") cityName: ElementRef;
+  cityData: any = null;
+  cityNameFromInput = "";
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {}
 
   ngAfterViewInit() {
-    this.http.get(this.url).subscribe((todos: any) => {
+    /*  this.http.get(this.url).subscribe((todos: any) => {
       let dataFiltred: any = todos.filter((item, key) => {
         // console.log(item)
         if (key > 6 && key < 12) return true;
@@ -56,7 +59,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       const purple_orange_gradient = ctx.createLinearGradient(0, 0, 0, 600);
       purple_orange_gradient.addColorStop(1, "rgba(199, 150, 239, 0.1)");
       purple_orange_gradient.addColorStop(0, "rgba(199, 150, 239, 1)");
-  
+
       const bar_chart = new Chart(ctx, {
         type: "line",
         data: {
@@ -86,10 +89,23 @@ export class AppComponent implements OnInit, AfterViewInit {
           }
         }
       });
-    });
-
+    });*/
     // initialise the chart
+  }
 
-    
+  /**
+   * Search for weather forcast by city: string
+   */
+  searchWeather() {
+    this.cityNameFromInput = this.cityName.nativeElement.value;
+
+    const url =
+      config.ENDPOINT_URL +
+      this.cityNameFromInput +
+      "&APPID=" +
+      config.WEATHER_API_KEY;
+    this.http.get(url).subscribe(data => {
+      this.cityData = data;
+    });
   }
 }
